@@ -54,6 +54,7 @@
 #define UART_DATABITS  8
 
 void riscv_Launch(void* pc,unsigned int thread, void* stack);
+#define THREAD_STACKSIZE (0x40)
 
 unsigned int UP(unsigned int v) {
   return v+1;
@@ -72,7 +73,7 @@ void ThreadF(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int ThreadF_Stack[0x40]; // Stack fuer ThreadF
+unsigned int ThreadF_Stack[THREAD_STACKSIZE]; // Stack fuer ThreadF
 //---------------------------------------------------------------------
 void ThreadE(void) {
     unsigned char val=0;
@@ -82,7 +83,7 @@ void ThreadE(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int ThreadE_Stack[0x40]; // Stack fuer ThreadE
+unsigned int ThreadE_Stack[THREAD_STACKSIZE]; // Stack fuer ThreadE
 //---------------------------------------------------------------------
 void ThreadD(void) {
     unsigned char val=0;
@@ -92,7 +93,7 @@ void ThreadD(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int ThreadD_Stack[0x40]; // Stack fuer ThreadD
+unsigned int ThreadD_Stack[THREAD_STACKSIZE]; // Stack fuer ThreadD
 //---------------------------------------------------------------------
 void ThreadC(void) {
     unsigned char val=0;
@@ -102,7 +103,7 @@ void ThreadC(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int ThreadC_Stack[0x40]; // Stack fuer ThreadC
+unsigned int ThreadC_Stack[THREAD_STACKSIZE]; // Stack fuer ThreadC
 //---------------------------------------------------------------------
 void ThreadB(void) {
     unsigned char val=0;
@@ -112,7 +113,7 @@ void ThreadB(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int ThreadB_Stack[0x40]; // Stack fuer ThreadB
+unsigned int ThreadB_Stack[THREAD_STACKSIZE]; // Stack fuer ThreadB
 //---------------------------------------------------------------------
 void ThreadA(void) {
     unsigned char val=0;
@@ -122,7 +123,7 @@ void ThreadA(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int ThreadA_Stack[0x40]; // Stack fuer ThreadA
+unsigned int ThreadA_Stack[THREAD_STACKSIZE]; // Stack fuer ThreadA
 //---------------------------------------------------------------------
 void Thread9(void) {
     unsigned char val=0;
@@ -132,7 +133,7 @@ void Thread9(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int Thread9_Stack[0x40]; // Stack fuer Thread9
+unsigned int Thread9_Stack[THREAD_STACKSIZE]; // Stack fuer Thread9
 //---------------------------------------------------------------------
 void Thread8(void) {
     unsigned char val=0;
@@ -142,7 +143,7 @@ void Thread8(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int Thread8_Stack[0x40]; // Stack fuer Thread8
+unsigned int Thread8_Stack[THREAD_STACKSIZE]; // Stack fuer Thread8
 //---------------------------------------------------------------------
 void Thread7(void) {
     unsigned char val=0;
@@ -152,7 +153,7 @@ void Thread7(void) {
     if (val==0x10) { val=0; }
   }
 }
-unsigned int Thread7_Stack[0x40]; // Stack fuer Thread7
+unsigned int Thread7_Stack[THREAD_STACKSIZE]; // Stack fuer Thread7
 //---------------------------------------------------------------------
 void Thread6(void) {
   unsigned char val=0;
@@ -162,7 +163,7 @@ void Thread6(void) {
   }
   val = val+1;
 }
-unsigned int Thread6_Stack[0x40]; // Stack fuer Thread6
+unsigned int Thread6_Stack[THREAD_STACKSIZE]; // Stack fuer Thread6
 //---------------------------------------------------------------------
 unsigned char th5_val;
 void Thread5(void) {
@@ -176,7 +177,7 @@ void Thread5(void) {
     th5_val = val;
   }
 }
-unsigned int Thread5_Stack[0x40]; // Stack fuer Thread5
+unsigned int Thread5_Stack[THREAD_STACKSIZE]; // Stack fuer Thread5
 //---------------------------------------------------------------------
 unsigned char th4_val;
 void Thread4(void) {
@@ -190,7 +191,7 @@ void Thread4(void) {
     th4_val = val;
   }
 }
-unsigned int Thread4_Stack[0x40]; // Stack fuer Thread4
+unsigned int Thread4_Stack[THREAD_STACKSIZE]; // Stack fuer Thread4
 //---------------------------------------------------------------------
 unsigned char th3_val;
 void Thread3(void) {
@@ -204,7 +205,7 @@ void Thread3(void) {
     th3_val = val;
   }
 }
-unsigned int Thread3_Stack[0x40]; // Stack fuer Thread3
+unsigned int Thread3_Stack[THREAD_STACKSIZE]; // Stack fuer Thread3
 //---------------------------------------------------------------------
 void Thread2(void) { // Interrupt thread
   unsigned int SiebenSeg_val;
@@ -227,24 +228,24 @@ void Thread2(void) { // Interrupt thread
     out32(GPIO_BASE+GPIO_DO,SiebenSeg_val<<5); // Wert ausgeben
   }
 }
-unsigned int Thread2_Stack[0x40]; // Stack fuer Thread2
+unsigned int Thread2_Stack[THREAD_STACKSIZE]; // Stack fuer Thread2
 //---------------------------------------------------------------------
 int main( void ) {
   //
-  riscv_Launch(Thread2,0x2, Thread2_Stack);
-  riscv_Launch(Thread3,0x3, Thread3_Stack);
-  riscv_Launch(Thread4,0x4, Thread4_Stack);
-  riscv_Launch(Thread5,0x5, Thread5_Stack);
-  riscv_Launch(Thread6,0x6, Thread6_Stack);
-  riscv_Launch(Thread7,0x7, Thread7_Stack);
-  riscv_Launch(Thread8,0x8, Thread8_Stack);
-  riscv_Launch(Thread9,0x9, Thread9_Stack);
-  riscv_Launch(ThreadA,0xA, ThreadA_Stack);
-  riscv_Launch(ThreadB,0xB, ThreadB_Stack);
-  riscv_Launch(ThreadC,0xC, ThreadC_Stack);
-  riscv_Launch(ThreadD,0xD, ThreadD_Stack);
-  riscv_Launch(ThreadE,0xE, ThreadE_Stack);
-  riscv_Launch(ThreadF,0xF, ThreadF_Stack);
+  riscv_Launch(Thread2,0x2, Thread2_Stack+THREAD_STACKSIZE);
+  riscv_Launch(Thread3,0x3, Thread3_Stack+THREAD_STACKSIZE);
+  riscv_Launch(Thread4,0x4, Thread4_Stack+THREAD_STACKSIZE);
+  riscv_Launch(Thread5,0x5, Thread5_Stack+THREAD_STACKSIZE);
+  riscv_Launch(Thread6,0x6, Thread6_Stack+THREAD_STACKSIZE);
+  riscv_Launch(Thread7,0x7, Thread7_Stack+THREAD_STACKSIZE);
+  riscv_Launch(Thread8,0x8, Thread8_Stack+THREAD_STACKSIZE);
+  riscv_Launch(Thread9,0x9, Thread9_Stack+THREAD_STACKSIZE);
+  riscv_Launch(ThreadA,0xA, ThreadA_Stack+THREAD_STACKSIZE);
+  riscv_Launch(ThreadB,0xB, ThreadB_Stack+THREAD_STACKSIZE);
+  riscv_Launch(ThreadC,0xC, ThreadC_Stack+THREAD_STACKSIZE);
+  riscv_Launch(ThreadD,0xD, ThreadD_Stack+THREAD_STACKSIZE);
+  riscv_Launch(ThreadE,0xE, ThreadE_Stack+THREAD_STACKSIZE);
+  riscv_Launch(ThreadF,0xF, ThreadF_Stack+THREAD_STACKSIZE);
   // Endlessly increment a variable.
   unsigned int counter;
   counter=STARTWERT;
