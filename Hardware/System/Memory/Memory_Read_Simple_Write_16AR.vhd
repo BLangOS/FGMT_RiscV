@@ -1,23 +1,3 @@
------------------------------------------------------------------------------------------------
--- FGMT-RiscV: Implementation of 32-Bit Risc-V allowing fine grained multiprocessing
--- Copyright (C) 2025  Bernhard Lang
---
--- This program is free software; you can redistribute it and/or modify
--- it under the terms of the GNU General Public License as published by
--- the Free Software Foundation; either version 3 of the License, or
--- (at your option) any later version.
---
--- This program is distributed in the hope that it will be useful,
--- but WITHOUT ANY WARRANTY; without even the implied warranty of
--- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
--- GNU General Public License for more details.
---
--- You should have received a copy of the GNU General Public License
--- along with this program; if not, see http://www.gnu.org/licenses
--- or write to the Free Software Foundation,Inc., 51 Franklin Street,
--- Fifth Floor, Boston, MA 02110-1301  USA
------------------------------------------------------------------------------------------------
-
 -----------------------------------------------------------------------------------
 -- Memory with half word aligned read access (needed for compressed instructions)
 -- B. Lang
@@ -147,6 +127,7 @@ begin
     type States is (MUX, Wait1, Wait0,Err);
     signal State: States;
     signal NextState: States;
+		signal z: std_logic_vector(3 downto 0);
   begin
     SR_ADR     <= S0R_ADR when MuxSel=S0 else
                   S1R_ADR when MuxSel=S1 else
@@ -219,11 +200,19 @@ begin
               SR_Valid  <= '1';
               MuxSel    <= S0;
             end if;
-          when Err => null;
+          when Err    => null;
+          --when others => null;
         end case;
       end if;
     end process;
-                  
+
+    StateReg: process(CLK)
+		begin
+		  if rising_edge(CLK) then
+			  State <= NextState;
+			end if;
+		end process;
+		
   end block;
 
   ReadySync: block
